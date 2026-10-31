@@ -1,0 +1,82 @@
+:root { --cat: clamp(180px, 38vh, 380px); --accent: #ffb347; --panel: rgba(8, 12, 32, 0.88); }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; color: #eef2ff; font-family: "Trebuchet MS", "Segoe UI", sans-serif; }
+[hidden] { display: none !important; }
+button { font: inherit; cursor: pointer; }
+
+#stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease; }
+.bg.on { opacity: 1; }
+
+#hud { position: absolute; top: 0; left: 0; right: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.7rem 1.2rem; font-size: 1.6rem; font-weight: bold; background: rgba(0, 0, 0, 0.55); }
+#hudLives span { color: #ff4d6d; font-size: 2.2rem; margin-left: 0.2rem; }
+#hudLives span.lost { color: #555; }
+.audio { display: flex; align-items: center; gap: 0.5rem; }
+#muteBtn { background: none; border: 0; font-size: 2rem; }
+#volume { width: 130px; }
+
+.screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; padding: 5.5rem 1rem 1rem; overflow-y: auto; overflow-x: hidden; }
+.screen > * { flex-shrink: 0; }
+.screen.center { justify-content: center; text-align: center; padding-top: 1rem; background: rgba(0, 0, 8, 0.6); }
+#title, #end, #transit { z-index: 5; }
+#title { background: url('./assets/sprites/bgs/menu.png') center / cover no-repeat; text-shadow: 0 2px 6px #000; }
+#title, #end { justify-content: flex-start; padding-top: calc(6vh + min(40vh, 300px) + 1rem); }
+#transit { justify-content: flex-start; background: none; padding-top: 5.5rem; }
+#transit .panel { text-align: center; }
+#transitText { font-size: 1.5rem; }
+h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 0; color: var(--accent); text-shadow: 0 0 20px #ff8c00; }
+h2 { margin: 0 0 1rem; }
+.story { max-width: 600px; line-height: 1.5; background: rgba(0, 0, 8, 0.6); padding: 0.8rem 1rem; border-radius: 10px; }
+.loadbar { width: min(360px, 80vw); height: 10px; background: #223; border-radius: 5px; overflow: hidden; margin-top: 1rem; }
+#loadFill { height: 100%; width: 0; background: var(--accent); transition: width 0.2s; }
+button#startBtn { margin-top: 1rem; }
+button#startBtn, button#restartBtn, button#nextBtn, .opt { background: var(--accent); color: #1a1030; border: 0; border-radius: 10px; padding: 0.7rem 1.5rem; font-weight: bold; font-size: 1.2rem; }
+button:disabled { opacity: 0.4; cursor: default; }
+button#startBtn:not(:disabled):hover, button#restartBtn:hover, button#nextBtn:hover { filter: brightness(1.15); }
+
+#dialog { justify-content: flex-end; padding-bottom: 2rem; cursor: pointer; }
+.dialog-row { position: relative; display: flex; align-items: flex-end; justify-content: space-between; width: min(1400px, 100%); padding-bottom: 150px; }
+.portrait { width: clamp(140px, 28vw, 340px); aspect-ratio: 1; object-fit: contain; transition: all 0.3s ease; }
+.portrait.active { transform: scale(1.12); filter: grayscale(0%) brightness(1); z-index: 2; }
+.portrait.idle { transform: scale(0.88); filter: grayscale(85%) brightness(0.55); z-index: 1; }
+#dialogBox { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); z-index: 3; width: min(1150px, 96%); min-height: 140px; background: var(--panel); border: 2px solid var(--accent); border-radius: 14px; padding: 1.2rem 1.5rem; }
+#dialogName { color: var(--accent); font-size: 1.5rem; }
+#dialogText { min-height: 4.5em; margin: 0.5rem 0; font-size: 1.6rem; line-height: 1.4; }
+#dialogBox small { opacity: 0.6; font-size: 1rem; }
+
+.panel { position: relative; z-index: 3; width: min(780px, 100%); background: var(--panel); border: 2px solid var(--accent); border-radius: 14px; padding: 1.2rem; }
+#quizTag { display: inline-block; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+#quizText { font-size: 1.4rem; line-height: 1.5; margin: 0.5rem 0 1rem; }
+#quizFig svg { display: block; margin: 0 auto 1rem; width: min(320px, 100%); background: #0b1230; border-radius: 8px; }
+#quizOpts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+.opt { text-align: left; background: #26305f; color: #eef2ff; border: 2px solid transparent; }
+.opt:not(:disabled):hover { border-color: var(--accent); }
+.opt.right { background: #1e7a46; }
+.opt.wrong { background: #9b2335; }
+.opt:disabled { opacity: 1; cursor: default; }
+#quizFb { display: flex; align-items: center; gap: 0.8rem; margin: 1rem 0 0.5rem; line-height: 1.4; font-size: 1.15rem; }
+#quizFb img { width: 64px; height: 64px; object-fit: contain; }
+#nextBtn { margin-top: 0.5rem; }
+
+#end { justify-content: flex-start; padding-top: calc(6vh + min(40vh, 300px) + 1rem); }
+#end h2 { font-size: clamp(1.4rem, 4vw, 2rem); max-width: 700px; line-height: 1.3; }
+#endScore { font-size: 1.4rem; color: var(--accent); }
+
+#cat { position: absolute; left: 1rem; bottom: 1rem; width: var(--cat); height: var(--cat); z-index: 2; pointer-events: none; }
+#cat.center { left: 50%; transform: translateX(-50%); bottom: auto; top: 6vh; z-index: 6; width: min(40vh, 300px); height: min(40vh, 300px); }
+#cat { transition: opacity 0.6s; }
+#cat.fly { transform: translate(100vw, -110vh) rotate(20deg); transition: transform 1s ease-in; }
+
+@media (max-width: 700px) {
+  #quizOpts { grid-template-columns: 1fr; }
+  .dialog-row { flex-wrap: wrap; }
+  #portCat { order: 1; }
+  #portCmd { order: 2; }
+  .dialog-row { justify-content: center; gap: 1rem; padding-bottom: 0; }
+  #dialogBox { position: static; transform: none; order: 3; flex-basis: 100%; width: auto; }
+  .portrait { width: 38vw; }
+  #dialogText { font-size: 1.3rem; }
+  #hud { font-size: 1.1rem; padding: 0.5rem 0.7rem; }
+  #hudLives span { font-size: 1.7rem; }
+  #volume { width: 70px; }
+}
