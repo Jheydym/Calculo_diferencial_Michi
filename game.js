@@ -11,8 +11,8 @@ const SHEETS = {
   run: { src: SPRITES + 'main_cat/cat_run_without_hand/Cat_Felix_root_cat_run_without_hand.png', frames: 15 },
   jump: { src: SPRITES + 'main_cat/cat_jump/Cat_Felix_root_cat_jump.png', frames: 11 },
 };
-const BGS = ['level_1.jpg', 'level_2.png', 'level_3.png', 'level_4.png', 'level_5.jpg', 'level_6.png'].map(f => SPRITES + 'bgs/' + f);
-const MENU_BG = SPRITES + 'bgs/menu.png';
+const BGS = ['level_1.jpg', 'level_2.jpg', 'level_3.jpg', 'level_4.jpg', 'level_5.jpg', 'level_6.jpg'].map(f => SPRITES + 'bgs/' + f);
+const MENU_BG = SPRITES + 'bgs/menu.jpg';
 const PORTRAITS = ['portrait_main_cat.png', 'portrait_commander.png'].map(f => SPRITES + 'portraits/' + f);
 const MUSIC = ['./assets/music/music_a.mp3', './assets/music/music_b.mp3'];
 const SFX_FILES = {

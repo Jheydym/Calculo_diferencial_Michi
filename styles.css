@@ -19,7 +19,7 @@ button { font: inherit; cursor: pointer; }
 .screen > * { flex-shrink: 0; }
 .screen.center { justify-content: center; text-align: center; padding-top: 1rem; background: rgba(0, 0, 8, 0.6); }
 #title, #end, #transit { z-index: 5; }
-#title { background: url('./assets/sprites/bgs/menu.png') center / cover no-repeat; text-shadow: 0 2px 6px #000; }
+#title { background: url('./assets/sprites/bgs/menu.jpg') center / cover no-repeat; text-shadow: 0 2px 6px #000; }
 #title, #end { justify-content: flex-start; padding-top: calc(6vh + var(--hero) + 1rem); }
 #transit { justify-content: flex-start; background: none; padding-top: 5.5rem; }
 #transit .panel { text-align: center; }
