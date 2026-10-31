@@ -135,6 +135,8 @@ const loadAudio = src => new Promise((res, rej) => {
   a.addEventListener('canplaythrough', ok, { once: true });
   a.addEventListener('loadeddata', ok, { once: true });
   a.addEventListener('error', () => rej(new Error(`No se pudo cargar ${src}`)), { once: true });
+  // iOS no carga audio hasta el primer toque y nunca dispara los eventos de arriba.
+  setTimeout(ok, 3000);
   a.preload = 'auto';
   a.src = src;
 });
