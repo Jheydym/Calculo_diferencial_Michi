@@ -18,7 +18,9 @@ const MUSIC = ['./assets/music/music_a.mp3', './assets/music/music_b.mp3'];
 const SFX_FILES = {
   click: 'btn_click', blip: 'type_blip', correct: 'correct', wrong: 'wrong',
   levelUp: 'level_up', victory: 'victory', gameOver: 'game_over',
+  meow1: 'meow_1', meow2: 'meow_2', meow3: 'meow_3',
 };
+const MEOWS = ['miau', 'mrrrow', 'miaaau', 'prrr', 'mew', 'nyaa'];
 
 const $ = id => document.getElementById(id);
 const shuffle = a => {
@@ -28,6 +30,10 @@ const shuffle = a => {
   }
   return a;
 };
+const meowify = text => text.replace(/[\p{L}\p{N}-]+/gu, w => {
+  const m = MEOWS[(w.length + w.charCodeAt(0)) % MEOWS.length];
+  return w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase() ? m[0].toUpperCase() + m.slice(1) : m;
+});
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const graphAsymptote = () => {
@@ -119,6 +125,7 @@ let onAdvance = null;
 let activeBg = 0;
 let shownBg = -1;
 let currentTrack = 1;
+let catLang = false;
 
 const ctx = $('cat').getContext('2d');
 
@@ -245,7 +252,7 @@ function typeLine(text) {
     };
     const timer = setInterval(() => {
       $('dialogText').textContent = text.slice(0, ++i);
-      if (i % 3 === 0) playSfx('blip', 0.4);
+      if (!catLang && i % 3 === 0) playSfx('blip', 0.4);
       if (i >= text.length) finish();
     }, 28);
     onAdvance = finish;
@@ -261,7 +268,8 @@ async function runDialog(lines) {
     $('portCat').className = `portrait ${isCat ? 'active' : 'idle'}`;
     $('portCmd').className = `portrait ${isCat ? 'idle' : 'active'}`;
     $('dialogName').textContent = who;
-    await typeLine(text);
+    if (catLang) playSfx(`meow${1 + Math.floor(Math.random() * 3)}`);
+    await typeLine(catLang ? meowify(text) : text);
     await waitAdvance();
   }
 }
@@ -271,7 +279,7 @@ function askQuestion(q, onWrong) {
     showScreen('quiz');
     playAnim('idle');
     $('quizTag').textContent = q.tag;
-    $('quizText').textContent = q.q;
+    $('quizText').textContent = catLang ? `${q.q.replace(/\.$/, '')}, digo, miau` : q.q;
     $('quizFig').innerHTML = q.fig ? q.fig() : '';
     $('quizFb').hidden = true;
     $('nextBtn').hidden = true;
@@ -315,7 +323,8 @@ function askQuestion(q, onWrong) {
           buttons.forEach(b => { b.disabled = true; });
           setTimeout(() => res(null), 1500);
         } else {
-          showFeedback(`${CMD}: Esa respuesta es incorrecta. ¡Inténtalo de nuevo!`, true);
+          const retry = 'Esa respuesta es incorrecta. ¡Inténtalo de nuevo!';
+          showFeedback(`${CMD}: ${catLang ? meowify(retry) : retry}`, true);
         }
         return;
       }
@@ -410,6 +419,11 @@ document.addEventListener('keydown', e => {
   }
 });
 $('volume').addEventListener('input', e => { audio.volume = +e.target.value; audio.muted = false; applyVolume(); });
+$('langBtn').addEventListener('click', () => {
+  catLang = !catLang;
+  $('langBtn').textContent = catLang ? 'MIAU' : 'ES';
+  if (catLang) playSfx('meow1');
+});
 $('muteBtn').addEventListener('click', () => { audio.muted = !audio.muted; applyVolume(); });
 $('startBtn').addEventListener('click', () => { playSfx('click'); runGame(); });
 document.addEventListener('pointerdown', () => setMusic(currentTrack), { once: true });
