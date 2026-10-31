@@ -122,10 +122,13 @@ let currentTrack = 1;
 
 const ctx = $('cat').getContext('2d');
 
-const loadImage = src => new Promise((res, rej) => {
+const loadImage = (src, retries = 3) => new Promise((res, rej) => {
   const img = new Image();
   img.onload = () => res(img);
-  img.onerror = () => rej(new Error(`No se pudo cargar ${src}`));
+  img.onerror = () => {
+    if (retries > 0) setTimeout(() => loadImage(src, retries - 1).then(res, rej), 800);
+    else rej(new Error(`No se pudo cargar ${src}`));
+  };
   img.src = src;
 });
 
@@ -227,7 +230,7 @@ const renderMath = el => window.renderMathInElement?.(el, { delimiters: [{ left:
 
 function updateHud(level, fails) {
   $('hudLevel').textContent = `Sector ${level + 1} / ${BGS.length}`;
-  $('hudLives').innerHTML = Array.from({ length: MAX_FAILS }, (_, i) => `<span class="${i < fails ? 'lost' : ''}">♥</span>`).join('');
+  $('hudLives').innerHTML = Array.from({ length: MAX_FAILS }, (_, i) => `<span class="${i < fails ? 'lost' : ''}">${i < fails ? '♡' : '♥︎'}</span>`).join('');
 }
 
 function typeLine(text) {
