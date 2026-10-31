@@ -23,7 +23,7 @@ const SFX_FILES = {
 const MEOWS = ['miau', 'mrrrow', 'miaaau', 'prrr', 'mew', 'nyaa'];
 
 const $ = id => document.getElementById(id);
-const STORY = $('story').textContent;
+const MENU_TEXT = Object.fromEntries(['subtitle', 'story', 'startBtn'].map(id => [id, $(id).textContent]));
 const shuffle = a => {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -423,7 +423,7 @@ $('volume').addEventListener('input', e => { audio.volume = +e.target.value; aud
 $('langBtn').addEventListener('click', () => {
   catLang = !catLang;
   $('langBtn').textContent = catLang ? 'MIAU' : 'ES';
-  $('story').textContent = catLang ? meowify(STORY) : STORY;
+  for (const [id, text] of Object.entries(MENU_TEXT)) $(id).textContent = catLang ? meowify(text) : text;
   if (catLang) playSfx('meow1');
 });
 $('muteBtn').addEventListener('click', () => { audio.muted = !audio.muted; applyVolume(); });
